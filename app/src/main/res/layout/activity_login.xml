@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/loginContainer"
+    android:background="@drawable/ark_congress_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logoArkCongress"
+        android:background="@drawable/logo_background"
+        android:src="@mipmap/ark_congress"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp" />
+
+    <com.facebook.login.widget.LoginButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/facebook_login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="@dimen/padding_inside_login"
+        android:paddingBottom="@dimen/padding_inside_login"
+        android:layout_margin="@dimen/padding_login"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/facebook_login_button"
+        android:layout_alignStart="@+id/facebook_login_button"
+        android:layout_alignLeft="@+id/facebook_login_button"
+        android:layout_alignEnd="@+id/facebook_login_button"
+        android:layout_alignRight="@+id/facebook_login_button"
+        android:paddingTop="@dimen/padding_inside_login"
+        android:paddingBottom="@dimen/padding_inside_login" />
+
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twitter_login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/google_login_button"
+        android:layout_alignStart="@+id/google_login_button"
+        android:layout_alignLeft="@+id/google_login_button"
+        android:layout_alignEnd="@+id/google_login_button"
+        android:layout_alignRight="@+id/google_login_button" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginProgressBar"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

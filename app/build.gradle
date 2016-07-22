@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+apply plugin: 'android-apt'
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "masterwb.design.arkcongress"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            buildConfigField "String", "TWITTER_KEY", project.property('TWITTER_KEY')
+            buildConfigField "String", "TWITTER_SECRET", project.property('TWITTER_SECRET')
+            buildConfigField "String", "GOOGLE_CLIENT_ID", project.property('GOOGLE_CLIENT_ID')
+            resValue "string", "FABRIC_KEY", project.property('FABRIC_KEY')
+            resValue "string", "FB_APP_ID", project.property('FB_APP_ID')
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "TWITTER_KEY", project.property('TWITTER_KEY')
+            buildConfigField "String", "TWITTER_SECRET", project.property('TWITTER_SECRET')
+            buildConfigField "String", "GOOGLE_CLIENT_ID", project.property('GOOGLE_CLIENT_ID')
+            resValue "string", "FABRIC_KEY", project.property('FABRIC_KEY')
+            resValue "string", "FB_APP_ID", project.property("FB_APP_ID")
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:support-annotations:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+
+    compile 'com.google.android.gms:play-services-auth:9.0.0'
+    compile 'com.google.firebase:firebase-database:9.0.0'
+    compile 'com.google.firebase:firebase-auth:9.0.0'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile('com.twitter.sdk.android:twitter:1.14.1@aar') {
+        transitive = true;
+    }
+}

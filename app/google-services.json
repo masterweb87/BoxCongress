@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "145685614596",
+    "project_id": "firebase-arkcongress"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145685614596:android:665efa70b2fa59d1",
+        "android_client_info": {
+          "package_name": "masterwb.design.arkcongress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145685614596-m2qud333oqlloc0lcn7ajjm1ehn8vh9e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "masterwb.design.arkcongress",
+            "certificate_hash": "976D316B24DC5696B1EC460BD2B420F12F68AFD1"
+          }
+        },
+        {
+          "client_id": "145685614596-uu7ddpkohmcq542ns6u7ludpb2bmrefb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCGTVPTIxMZjhboN0LE_Vx-W-i54LytIs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

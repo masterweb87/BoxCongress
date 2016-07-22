@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/padding_event"
+    card_view:cardCornerRadius="@dimen/event_card_corner_radius"
+    card_view:cardElevation="@dimen/event_card_elevation">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_event_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageEvent"
+            android:src="@mipmap/ark_congress"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="@dimen/padding_image_event"
+            android:layout_marginEnd="@dimen/padding_image_event"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleEvent"
+            android:background="@drawable/title_background"
+            android:text="@string/test_text"
+            android:textSize="@dimen/event_title_size"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/imageEvent"
+            android:layout_toEndOf="@+id/imageEvent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/typeEvent"
+            android:text="@string/test_text"
+            android:textSize="@dimen/event_type_size"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startDateEvent"
+            android:text="@string/test_text"
+            android:textSize="@dimen/event_date_size"
+            android:textStyle="bold"
+            android:layout_alignStart="@+id/titleEvent"
+            android:layout_alignLeft="@+id/titleEvent"
+            android:layout_below="@+id/titleEvent"
+            android:paddingTop="@dimen/padding_title_date"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dateDivider"
+            android:text="@string/date_divider"
+            android:textSize="@dimen/event_date_size"
+            android:layout_alignBottom="@+id/startDateEvent"
+            android:layout_toRightOf="@+id/startDateEvent"
+            android:layout_toEndOf="@+id/startDateEvent"
+            android:paddingLeft="@dimen/padding_date" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/endDateEvent"
+            android:text="@string/test_text"
+            android:textSize="@dimen/event_date_size"
+            android:layout_alignBottom="@+id/dateDivider"
+            android:layout_toRightOf="@+id/dateDivider"
+            android:layout_toEndOf="@+id/dateDivider"
+            android:paddingLeft="@dimen/padding_date" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationEvent"
+            android:text="@string/test_text"
+            android:textSize="@dimen/event_location_size"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/typeEvent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/descriptionEvent"
+            android:background="@drawable/description_background"
+            android:text="@string/test_text"
+            android:textSize="@dimen/event_description_size"
+            android:textStyle="bold"
+            android:gravity="fill_horizontal"
+            android:layout_below="@+id/imageEvent"
+            android:layout_marginTop="@dimen/padding_description" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
