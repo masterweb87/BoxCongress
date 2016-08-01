@@ -2,6 +2,7 @@ package masterwb.design.arkcongress.entities;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Master on 10/07/2016.
@@ -40,7 +41,7 @@ public class Event {
     }
 
     public String getEndDateFormatted() {
-        String newEndDate = new SimpleDateFormat("dd-MMM-yyyy").format(this.endDate);
+        String newEndDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(this.endDate);
         return newEndDate;
     }
 
@@ -61,7 +62,7 @@ public class Event {
     }
 
     public String getStartDateFormatted() {
-        String newStartDate = new SimpleDateFormat("dd-MMM-yyyy").format(this.startDate);
+        String newStartDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(this.startDate);
         return newStartDate;
     }
 

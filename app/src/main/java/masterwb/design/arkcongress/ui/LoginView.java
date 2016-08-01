@@ -6,10 +6,11 @@ package masterwb.design.arkcongress.ui;
 public interface LoginView {
     void goToMainScreen();
     void loginError(int errorType);
+    void loginError(int errorType, String provider);
 
     void showProgress();
     void hideProgress();
 
-    void newUserSuccess();
-    void newUserError(String error);
+    void enableButtons();
+    void disableButtons();
 }

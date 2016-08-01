@@ -1,8 +1,13 @@
 package masterwb.design.arkcongress.ui;
 
+import android.app.Activity;
+
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.twitter.sdk.android.core.TwitterSession;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -33,36 +38,16 @@ public class LoginPresenter {
         eventBus.unregister(this);
     }
 
-    public GoogleSignInOptions setGoogleOptions() {
-        return repository.setGoogleOptions();
+    public AuthCredential loginFirebaseWithFacebook(AccessToken token) {
+        return repository.firebaseAuthWithFacebook(token);
     }
 
-    public void handleGoogleSignInResult(GoogleSignInResult result) {
-        repository.handleGoogleSignInResult(result);
+    public AuthCredential loginFirebaseWithGoogle(GoogleSignInResult result) {
+        return repository.firebaseAuthWithGoogle(result);
     }
 
-    public AccessToken getFacebookSession() {
-        return repository.getFacebookSession();
-    }
-
-    public void loginFirebaseWithFacebook(AccessToken token) {
-        repository.firebaseAuthWithFacebook(token);
-    }
-
-    public boolean getTwitterSession() {
-        return repository.getTwitterSession();
-    }
-
-    public void loginFirebaseWithTwitter(String token, String secret) {
-        repository.firebaseAuthWithTwitter(token, secret);
-    }
-
-    public void addAuthListener() {
-        repository.addAuthListener();
-    }
-
-    public void removeAuthListener() {
-        repository.removeAuthListener();
+    public AuthCredential loginFirebaseWithTwitter(String token, String secret) {
+        return repository.firebaseAuthWithTwitter(token, secret);
     }
 
     @Subscribe

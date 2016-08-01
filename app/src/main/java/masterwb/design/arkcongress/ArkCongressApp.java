@@ -20,6 +20,12 @@ public class ArkCongressApp extends Application {
         initializeFacebookLogin();
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        AppEventsLogger.onContextStop();
+    }
+
     public void initializeTwitterLogin() {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));

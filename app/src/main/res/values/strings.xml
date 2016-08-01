@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">ArkCongress</string>
 
+    <string name="main_title">Lista de eventos</string>
+    <string name="create_event_title">Crear evento</string>
+    <string name="myevents_title">Mis eventos</string>
+
+    <string name="toolbar_create_event">Crear un evento</string>
+    <string name="toolbar_my_events">Mis eventos</string>
     <string name="toolbar_logout">Cerrar sesión</string>
+
     <string name="test_text">Texto de prueba</string>
+    <string name="account_already_exists">Tienes ya una cuenta registrada. Inicia sesión con otro proveedor que no sea %s</string>
 
     <string name="facebook_login_error">Error al iniciar sesión a través de Facebook</string>
     <string name="facebook_login_cancel">El envío de credenciales de Facebook ha sido cancelada</string>
@@ -12,6 +20,27 @@
 
     <string name="twitter_login_error">Error al iniciar sesión a través de Twitter</string>
     <string name="twitter_login_cancel">El envío de credenciales de Twitter ha sido cancelada</string>
+
+    <!-- CREATE EVENT -->
+
+    <string-array name="event_type_list">
+        <item>Conferencia</item>
+        <item>Congreso</item>
+        <item>Taller</item>
+        <item>Bazar</item>
+    </string-array>
+
+    <string name="event_title">Crea tu evento</string>
+    <string name="event_name">Título</string>
+    <string name="event_type">Tipo</string>
+    <string name="event_selector_prompt">Elige el tipo de evento</string>
+    <string name="event_startdate">Inicia el</string>
+    <string name="event_starttime">Hora</string>
+    <string name="event_enddate">Termina el</string>
+    <string name="event_endtime">Hora</string>
+    <string name="event_location">Lugar</string>
+    <string name="event_description">Añade una descripción</string>
+    <string name="event_submit">Crear</string>
 
     <string name="date_divider"> - </string>
 </resources>

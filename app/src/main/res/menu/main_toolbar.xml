@@ -5,6 +5,27 @@
     tools:context=".ui.MainActivity">
 
     <item
+        android:id="@+id/actionMainScreen"
+        android:title="@string/main_title"
+        android:orderInCategory="200"
+        android:icon="@mipmap/ic_home_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/actionMyEvents"
+        android:title="@string/toolbar_my_events"
+        android:orderInCategory="300"
+        android:icon="@mipmap/ic_insert_invitation_white_24dp"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/actionCreateEvent"
+        android:title="@string/toolbar_create_event"
+        android:orderInCategory="400"
+        android:icon="@mipmap/ic_add_circle_outline_white_24dp"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
         android:id="@+id/actionLogout"
         android:orderInCategory="100"
         android:textAppearance="?android:attr/textAppearanceMedium"

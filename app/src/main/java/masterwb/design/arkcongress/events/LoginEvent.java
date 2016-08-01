@@ -8,6 +8,7 @@ import masterwb.design.arkcongress.R;
 public class LoginEvent {
     public static final int loginError = 0;
     public static final int loginSuccess = 1;
+    public static final int loginAlreadyExists = 2;
 
     public static final int loginGoogleError = 10;
     public static final int loginFacebookError = 11;

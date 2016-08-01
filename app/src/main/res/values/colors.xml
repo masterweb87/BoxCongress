@@ -11,7 +11,10 @@
     <color name="textToolbar">#FFFFFF</color>
     <color name="textColorBackground">#EEEEFF</color>
     <color name="textColorContent">#010101</color>
+    <color name="textColorActionsMenu">#FFFFFF</color>
     <color name="textColorOptionsMenu">#010101</color>
+
+    <color name="buttonPressed">#EE2233</color>
 
     <color name="white">#FFFFFF</color>
 </resources>

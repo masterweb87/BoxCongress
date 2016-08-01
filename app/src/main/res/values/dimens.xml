@@ -31,4 +31,19 @@
     <dimen name="event_date_size">14sp</dimen>
     <dimen name="event_location_size">12sp</dimen>
     <dimen name="event_description_size">13sp</dimen>
+
+    <dimen name="create_event_sublayout_padding">18sp</dimen>
+    <dimen name="create_event_label">19sp</dimen>
+    <dimen name="create_event_input">19sp</dimen>
+    <dimen name="create_event_border_input">1dip</dimen>
+    <dimen name="create_event_inside_input">8dp</dimen>
+    <dimen name="create_event_date_input">170dp</dimen>
+    <dimen name="create_event_between_date_time">130dp</dimen>
+    <dimen name="create_event_between_end_date_time">105dp</dimen>
+    <dimen name="create_event_spinner">20sp</dimen>
+    <dimen name="create_event_spinner_text">16sp</dimen>
+    <dimen name="create_event_spinner_padding">50sp</dimen>
+    <dimen name="create_event_spinner_between_items">12dp</dimen>
+    <dimen name="create_event_spinner_arrow">25dp</dimen>
+    <dimen name="create_event_blank_space">60sp</dimen>
 </resources>

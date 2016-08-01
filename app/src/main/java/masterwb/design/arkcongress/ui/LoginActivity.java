@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -14,6 +15,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -22,6 +24,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -30,10 +39,17 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import masterwb.design.arkcongress.R;
+import masterwb.design.arkcongress.db.FirebaseManager;
+import masterwb.design.arkcongress.entities.FacebookClient;
+import masterwb.design.arkcongress.entities.GoogleClient;
+import masterwb.design.arkcongress.entities.TwitterClient;
 import masterwb.design.arkcongress.events.LoginEvent;
 
 /**
@@ -46,15 +62,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @BindView(R.id.loginContainer) RelativeLayout loginContainer;
     @BindView(R.id.loginProgressBar) ProgressBar progressBar;
 
+    private boolean activeSession;
     // Presenter
     private LoginPresenter presenter;
-    // Facebook variables
-    private static List<String> fb_permissions = Arrays.asList("public_profile");
-    private CallbackManager fb_manager;
-    private AccessToken currentToken;
-    // Google variables
-    private static final int RC_SIGN_IN = 9001;
-    private GoogleApiClient googleClient;
+    // Firebase listener
+    private FirebaseAuth authUser;
+    private FirebaseManager firebaseManager = FirebaseManager.getInstance();
+    // Facebook, Google and Twitter instances
+    private FacebookClient fbClient = FacebookClient.getInstance();
+    private GoogleClient googleClient = GoogleClient.getInstance();
+    private TwitterClient twitterClient = TwitterClient.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,13 +79,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        // Set Firebase auth instance
+        authUser = firebaseManager.getFirebaseAuth();
+        activeSession = firebaseManager.getFirebaseSession();
         // Set the Presenter
         presenter = new LoginPresenter(this);
         presenter.onCreate();
 
+        if(activeSession) {
+            goToMainScreen();
+        }
+
+        // Set Google
+        setGoogleOptions();
         // Login with Facebook
         loginWithFacebook();
-
         // Login with Twitter
         loginWithTwitter();
     }
@@ -76,77 +101,107 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     // Set the read permissions and login using FB credentials
     private void loginWithFacebook() {
         // Set FB callback Manager
-        fb_manager = CallbackManager.Factory.create();
-        currentToken = presenter.getFacebookSession();
+        fbClient.setFacebookManager();
 
-        if(currentToken != null) {
-            goToMainScreen();
-        }
-        else {
-            facebookLoginButton.setReadPermissions(fb_permissions);
-            facebookLoginButton.registerCallback(fb_manager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    currentToken = loginResult.getAccessToken();
-                    presenter.loginFirebaseWithFacebook(currentToken);
+        facebookLoginButton.setReadPermissions(fbClient.getFb_permissions());
+        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disableButtons();
+            }
+        });
+        facebookLoginButton.registerCallback(fbClient.getFacebookManager(), new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken newCurrentToken = loginResult.getAccessToken();
+                if(fbClient.isConnected()) fbClient.signOut();
+                AuthCredential authCredential = presenter.loginFirebaseWithFacebook(newCurrentToken);
+                if(authCredential != null) {
+                    signInWithCredential(authCredential);
                 }
-
-                @Override
-                public void onCancel() {
-                    loginError(LoginEvent.loginFacebookCancel);
-                }
-
-                @Override
-                public void onError(FacebookException error) {
+                else {
                     loginError(LoginEvent.loginFacebookError);
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onCancel() {
+                loginError(LoginEvent.loginFacebookCancel);
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                loginError(LoginEvent.loginFacebookError);
+            }
+        });
+    }
+
+    // Login using Google credentials
+    public void loginWithGoogle() {
+        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleClient.getGoogleApiClient());
+        startActivityForResult(intent, googleClient.getSuccessCode());
+    }
+
+    // Login using Twitter credentials
+    public void loginWithTwitter() {
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                twitterClient.setTwitterSession(result.data);
+                String token = result.data.getAuthToken().token;
+                String secret = result.data.getAuthToken().secret;
+                AuthCredential authCredential = presenter.loginFirebaseWithTwitter(token, secret);
+                //String twEmail = twitterClient.getTwitterEmail();
+                if(authCredential != null) {
+                    signInWithCredential(authCredential);
+                }
+                else {
+                    loginError(LoginEvent.loginTwitterError);
+                }
+            }
+            @Override
+            public void failure(TwitterException exception) {
+                loginError(LoginEvent.loginTwitterError);
+            }
+        });
     }
 
     // Set Google Options
     public void setGoogleOptions() {
-        GoogleSignInOptions googleOptions = presenter.setGoogleOptions();
-        googleClient = new GoogleApiClient.Builder(this)
+        GoogleSignInOptions googleOptions = googleClient.setGoogleOptions();
+        GoogleApiClient newGoogleClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleOptions).build();
+        googleClient.setGoogleApiClient(newGoogleClient);
+
         googleLoginButton.setOnClickListener(this);
         googleLoginButton.setScopes(googleOptions.getScopeArray());
         googleLoginButton.setSize(SignInButton.SIZE_WIDE);
     }
 
-    // Login using Google credentials
-    public void loginWithGoogle() {
-        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleClient);
-        startActivityForResult(intent, RC_SIGN_IN);
-    }
-
-    // Login using Twitter credentials
-    public void loginWithTwitter() {
-        if(presenter.getTwitterSession()) {
-            goToMainScreen();
-        }
-        else {
-            twitterLoginButton.setCallback(new Callback<TwitterSession>() {
-                @Override
-                public void success(Result<TwitterSession> result) {
-                    String token = result.data.getAuthToken().token;
-                    String secret = result.data.getAuthToken().secret;
-                    presenter.loginFirebaseWithTwitter(token, secret);
+    // Sign in Firebase with the credential provided
+    public void signInWithCredential(final AuthCredential authCredential) {
+        authUser.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                //Log.d("FIREBASE", "TASK RESULT -> "+task.isSuccessful());
+                if(!task.isSuccessful()) {
+                    enableButtons();
+                    authUser = firebaseManager.getFirebaseAuth();
+                    loginError(LoginEvent.loginAlreadyExists, authCredential.getProvider());
                 }
-                @Override
-                public void failure(TwitterException exception) {
-                    loginError(LoginEvent.loginTwitterError);
+                else {
+                    goToMainScreen();
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.google_login_button:
-                setGoogleOptions();
+                disableButtons();
                 loginWithGoogle();
                 break;
         }
@@ -154,24 +209,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     protected void onStart() {
-        presenter.addAuthListener();
         super.onStart();
+        firebaseManager.addAuthListener();
     }
 
     @Override
     protected void onStop() {
-        presenter.removeAuthListener();
+        firebaseManager.removeAuthListener();
         super.onStop();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -184,11 +229,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // FB
-        fb_manager.onActivityResult(requestCode, resultCode, data);
+        fbClient.getFacebookManager().onActivityResult(requestCode, resultCode, data);
         // Google
-        if(requestCode == RC_SIGN_IN) {
+        if(requestCode == googleClient.getSuccessCode()) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            presenter.handleGoogleSignInResult(result);
+            AuthCredential authCredential = presenter.loginFirebaseWithGoogle(result);
+            if(authCredential != null) {
+                signInWithCredential(authCredential);
+            }
+            else {
+                disableButtons();
+                loginError(LoginEvent.loginGoogleError);
+            }
         }
         // Twitter
         twitterLoginButton.onActivityResult(requestCode, resultCode, data);
@@ -215,14 +267,31 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Snackbar.make(loginContainer, msgError, Snackbar.LENGTH_SHORT).show();
     }
 
+    // Display the error message if the login is not successful
+    @Override
+    public void loginError(int errorType, String provider) {
+        String msgError = "";
+        String providerSplit[] = provider.split(Pattern.quote("."));
+        String providerName = providerSplit[0].substring(0,1).toUpperCase() + providerSplit[0].substring(1);
+        switch (errorType) {
+            case LoginEvent.loginAlreadyExists:
+                msgError = String.format(getString(R.string.account_already_exists), providerName);
+                break;
+        }
+        Snackbar.make(loginContainer, msgError, Snackbar.LENGTH_LONG).show();
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        if(connectionResult.getErrorMessage() != null) {
+            Snackbar.make(loginContainer, connectionResult.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     // Redirects the application to the Main screen
     @Override
     public void goToMainScreen() {
+        enableButtons();
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -239,12 +308,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @Override
-    public void newUserSuccess() {
-
+    public void enableButtons() {
+        facebookLoginButton.setEnabled(true);
+        googleLoginButton.setEnabled(true);
+        twitterLoginButton.setEnabled(true);
     }
 
     @Override
-    public void newUserError(String error) {
-
+    public void disableButtons() {
+        facebookLoginButton.setEnabled(false);
+        googleLoginButton.setEnabled(false);
+        twitterLoginButton.setEnabled(false);
     }
 }
