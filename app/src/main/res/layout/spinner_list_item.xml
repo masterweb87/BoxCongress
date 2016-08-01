@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinnerCheckedText"
+    android:singleLine="true"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/create_event_spinner_padding"
+    android:ellipsize="marquee"
+    android:padding="@dimen/create_event_spinner_between_items"
+    android:textColor="@color/textColorContent"
+    android:textSize="@dimen/create_event_spinner_text"/>
