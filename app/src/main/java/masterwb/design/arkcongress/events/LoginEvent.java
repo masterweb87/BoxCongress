@@ -1,6 +1,9 @@
 package masterwb.design.arkcongress.events;
 
+import java.util.List;
+
 import masterwb.design.arkcongress.R;
+import masterwb.design.arkcongress.entities.Event;
 
 /**
  * Created by Master on 16/07/2016.

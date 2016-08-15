@@ -1,45 +1,43 @@
-package masterwb.design.arkcongress.ui;
+package masterwb.design.arkcongress.main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.facebook.login.LoginManager;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.provider.FirebaseInitProvider;
-import com.twitter.sdk.android.Twitter;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import masterwb.design.arkcongress.R;
 import masterwb.design.arkcongress.adapters.EventsAdapter;
+import masterwb.design.arkcongress.create_event.CreateEventActivity;
 import masterwb.design.arkcongress.db.FirebaseManager;
-import masterwb.design.arkcongress.db.LoginRepository;
 import masterwb.design.arkcongress.entities.Event;
-import masterwb.design.arkcongress.entities.FacebookClient;
-import masterwb.design.arkcongress.entities.GoogleClient;
-import masterwb.design.arkcongress.entities.TwitterClient;
+import masterwb.design.arkcongress.login.LoginActivity;
+import masterwb.design.arkcongress.my_events.MyEventsActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainView {
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
     @BindView(R.id.mainRecyclerView) RecyclerView mainRecyclerView;
 
+    // Events data
     private RecyclerView recyclerView;
     private EventsAdapter adapter;
     // Session variable
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
+    private MainPresenter presenter;
+    // Progress dialog
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +45,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        presenter = new MainPresenter(this);
+        presenter.onCreate();
+
         firebaseManager.setFirebaseListener();
         setSupportActionBar(mainToolbar);
         invalidateOptionsMenu();
-        setRecyclerView();
-        setAdapter();
+
+        enableProgress();
+        firebaseManager.getAllEvents();
     }
 
     @Override
@@ -97,11 +99,14 @@ public class MainActivity extends AppCompatActivity {
     public List<Event> setItems() {
         List<Event> items = new ArrayList<>();
         for(int i=0; i<10; i++) {
-            Event item = new Event("Evento #"+i);
+            Event item = new Event();
+            item.setName("Evento #"+i);
             if(i%2 == 0) item.setType("Bazar");
             else item.setType("Congreso");
-            item.setStartDate(new Date());
-            item.setEndDate(new Date());
+            String newStartDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
+            item.setStartDate(newStartDate);
+            String newEndDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(new Date());
+            item.setEndDate(newEndDate);
             item.setLocation("Guadalajara");
             item.setDescription("Prueba de descripción del evento número "+i+". Más texto aquí acerca del evento");
             items.add(item);
@@ -112,11 +117,19 @@ public class MainActivity extends AppCompatActivity {
     public void setRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(layoutManager);
+        mainRecyclerView.setAdapter(adapter);
     }
 
-    public void setAdapter() {
-        adapter = new EventsAdapter(setItems());
-        mainRecyclerView.setAdapter(adapter);
+    private void enableProgress() {
+        progress = new ProgressDialog(this);
+        progress.setTitle(getString(R.string.main_loading_title));
+        progress.setMessage(getString(R.string.main_loading_msg));
+        progress.setIndeterminate(true);
+        progress.show();
+    }
+
+    private void disableProgress() {
+        progress.dismiss();
     }
 
     public void logout() {
@@ -136,5 +149,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         firebaseManager.removeAuthListener();
         super.onStop();
+    }
+
+    @Override
+    public void onEventListUpdate(List<Event> allEvents) {
+        adapter = new EventsAdapter(this, allEvents);
+        setRecyclerView();
+        adapter.notifyDataSetChanged();
+        disableProgress();
     }
 }

@@ -1,5 +1,8 @@
 package masterwb.design.arkcongress.entities;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -7,18 +10,26 @@ import java.util.Locale;
 /**
  * Created by Master on 10/07/2016.
  */
+@IgnoreExtraProperties
 public class Event {
+    private String id;
     private String name;
     private String type;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private String logoUrl;
     private String location;
     private String description;
+    private String owner;
 
-    public Event(String name) {
-        this.name = name;
+    public Event() {
     }
+
+    @Exclude
+    public String getId() { return id; }
+
+    @Exclude
+    public void setId(String id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -36,16 +47,11 @@ public class Event {
         this.type = type;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public String getEndDateFormatted() {
-        String newEndDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(this.endDate);
-        return newEndDate;
-    }
-
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -57,16 +63,11 @@ public class Event {
         this.location = location;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public String getStartDateFormatted() {
-        String newStartDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault()).format(this.startDate);
-        return newStartDate;
-    }
-
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
@@ -85,4 +86,8 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getOwner() { return owner; }
+
+    public void setOwner(String owner) { this.owner = owner; }
 }

@@ -2,6 +2,10 @@ package masterwb.design.arkcongress.events;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
+import masterwb.design.arkcongress.entities.Event;
+
 /**
  * Created by Master on 16/07/2016.
  */

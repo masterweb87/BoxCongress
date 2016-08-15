@@ -1,35 +1,15 @@
-package masterwb.design.arkcongress.db;
-
-import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.util.Log;
+package masterwb.design.arkcongress.login;
 
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import masterwb.design.arkcongress.events.CustomEventBus;
 import masterwb.design.arkcongress.events.LoginEvent;
-import masterwb.design.arkcongress.ui.LoginActivity;
 
 /**
  * Created by Master on 14/07/2016.

@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "145685614596",
-    "project_id": "firebase-arkcongress"
+    "firebase_url": "https://fir-arkcongress.firebaseio.com",
+    "project_id": "firebase-arkcongress",
+    "storage_bucket": "firebase-arkcongress.appspot.com"
   },
   "client": [
     {
@@ -21,7 +23,7 @@
           }
         },
         {
-          "client_id": "145685614596-uu7ddpkohmcq542ns6u7ludpb2bmrefb.apps.googleusercontent.com",
+          "client_id": "145685614596-g3kbqhsadk8qksqg9vvd9ebn43frf1ud.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,11 +37,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145685614596-g3kbqhsadk8qksqg9vvd9ebn43frf1ud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

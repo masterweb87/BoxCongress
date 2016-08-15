@@ -1,17 +1,11 @@
-package masterwb.design.arkcongress.ui;
-
-import android.app.Activity;
+package masterwb.design.arkcongress.login;
 
 import com.facebook.AccessToken;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.twitter.sdk.android.core.TwitterSession;
 
 import org.greenrobot.eventbus.Subscribe;
 
-import masterwb.design.arkcongress.db.LoginRepository;
 import masterwb.design.arkcongress.events.CustomEventBus;
 import masterwb.design.arkcongress.events.LoginEvent;
 

@@ -30,6 +30,12 @@
         <item>Bazar</item>
     </string-array>
 
+    <string name="create_event_loading_title">Creando evento…</string>
+    <string name="create_event_loading_msg">Espera a que la información se almacene</string>
+
+    <string name="create_event_required_error">Hace falta información. Ingresa todos los datos requeridos</string>
+    <string name="create_event_date_format_error">El formato de las fechas es incorrecto. Intente de nuevo</string>
+
     <string name="event_title">Crea tu evento</string>
     <string name="event_name">Título</string>
     <string name="event_type">Tipo</string>
@@ -43,4 +49,12 @@
     <string name="event_submit">Crear</string>
 
     <string name="date_divider"> - </string>
+
+    <!-- LOADING TEXT -->
+
+    <string name="my_event_loading_title">Cargando tus eventos…</string>
+    <string name="my_event_loading_msg">Estamos cargando la lista de tus eventos</string>
+
+    <string name="main_loading_title">Cargando la lista de eventos…</string>
+    <string name="main_loading_msg">Estamos cargando la lista de eventos en activo</string>
 </resources>

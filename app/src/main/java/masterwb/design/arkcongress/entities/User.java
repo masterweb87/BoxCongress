@@ -6,21 +6,11 @@ import android.net.Uri;
  * Created by Master on 15/07/2016.
  */
 public class User {
-    private String id;
     private String name;
     private String email;
-    private Uri avatarUrl;
+    private String avatarUrl;
 
-    public User(String email) {
-        this.email = email;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public User() {
     }
 
     public String getName() {
@@ -39,11 +29,11 @@ public class User {
         this.email = email;
     }
 
-    public Uri getAvatarUrl() {
+    public String getAvatarUrl() {
         return avatarUrl;
     }
 
-    public void setAvatarUrl(Uri avatarUrl) {
+    public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
 }

@@ -18,7 +18,7 @@
             android:name="io.fabric.ApiKey"
             android:value="c5f5857b5b79da1e2f43a2657835d5a228499510" />
 
-        <activity android:name=".ui.LoginActivity">
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,16 +26,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/main_title"></activity>
+            android:name=".main.MainActivity"
+            android:label="@string/main_title" />
         <activity
-            android:name=".ui.CreateEventActivity"
+            android:name=".create_event.CreateEventActivity"
             android:label="@string/create_event_title"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.MyEventsActivity"
-            android:label="@string/myevents_title">
-        </activity>
+            android:name=".my_events.MyEventsActivity"
+            android:label="@string/myevents_title"></activity>
+        <activity android:name=".event_info.EventInfoActivity"></activity>
     </application>
 
 </manifest>

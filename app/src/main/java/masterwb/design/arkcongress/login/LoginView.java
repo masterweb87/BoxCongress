@@ -1,4 +1,4 @@
-package masterwb.design.arkcongress.ui;
+package masterwb.design.arkcongress.login;
 
 /**
  * Created by Master on 16/07/2016.

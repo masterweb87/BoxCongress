@@ -1,11 +1,10 @@
-package masterwb.design.arkcongress.ui;
+package masterwb.design.arkcongress.create_event;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,7 +20,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -29,9 +28,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import masterwb.design.arkcongress.R;
 import masterwb.design.arkcongress.db.FirebaseManager;
+import masterwb.design.arkcongress.entities.Event;
+import masterwb.design.arkcongress.login.LoginActivity;
+import masterwb.design.arkcongress.main.MainActivity;
+import masterwb.design.arkcongress.my_events.MyEventsActivity;
 
 public class CreateEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    @BindView(R.id.createFormLayout) LinearLayout formLayout;
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
     @BindView(R.id.editEventName) EditText eventName;
     @BindView(R.id.listEventType) Spinner listEventType;
@@ -49,6 +53,8 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     private DatePickerDialog endDateDialog;
     private TimePickerDialog endTimeDialog;
     private boolean startTimeClicked;
+    // Type
+    private String typeSelected;
     // Session
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
 
@@ -76,7 +82,13 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToMyEvents();
+                if(!verifyRequiredNotEmpty()) {
+                    createNewEvent();
+                    goToMyEvents();
+                }
+                else {
+                    Snackbar.make(formLayout, R.string.create_event_required_error, Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -116,7 +128,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        typeSelected = parent.getItemAtPosition(position).toString();
     }
 
     @Override
@@ -198,6 +210,30 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         typeList.setDropDownViewResource(R.layout.spinner_list_item);
         listEventType.setAdapter(typeList);
         listEventType.setOnItemSelectedListener(this);
+    }
+
+    private boolean verifyRequiredNotEmpty() {
+        return eventName.getText().toString().isEmpty()
+                || typeSelected.isEmpty()
+                || description.getText().toString().isEmpty();
+    }
+
+    private void createNewEvent() {
+        Event newEvent = new Event();
+        // Set name and type
+        newEvent.setName(eventName.getText().toString());
+        newEvent.setType(typeSelected);
+        // Set start date and end date
+        newEvent.setStartDate(startDate.getText().toString());
+        newEvent.setEndDate(endDate.getText().toString());
+        // Set location and description
+        newEvent.setLocation(location.getText().toString());
+        newEvent.setDescription(description.getText().toString());
+        registerEventOnDatabase(newEvent);
+    }
+
+    private void registerEventOnDatabase(Event newEvent) {
+        firebaseManager.saveNewEvent(newEvent);
     }
 
     private void goBackToMainScreen() {
