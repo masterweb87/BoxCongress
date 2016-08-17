@@ -20,6 +20,10 @@ public class EventInfoPresenter {
         eventBus.register(this);
     }
 
+    public void onDestroy() {
+        eventBus.unregister(this);
+    }
+
     @Subscribe
     public void onSingleEventMainThread(EventList eventList) {
         if(view != null) {

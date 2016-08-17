@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
     @BindView(R.id.mainRecyclerView) RecyclerView mainRecyclerView;
 
-    // Events data
-    private RecyclerView recyclerView;
+    // Events adapter
     private EventsAdapter adapter;
     // Session variable
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
@@ -149,6 +148,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onStop() {
         firebaseManager.removeAuthListener();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     @Override

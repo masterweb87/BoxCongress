@@ -24,6 +24,7 @@
             android:id="@+id/mainToolbar"
             android:background="@color/toolBarBackground"
             app:layout_scrollFlags="scroll|enterAlways"
+            app:layout_collapseMode="pin"
             app:theme="@style/AppTheme.NoActionBar"
             app:popupTheme="@style/AppTheme.NoActionBar.Submenu">
         </android.support.v7.widget.Toolbar>

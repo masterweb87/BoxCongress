@@ -46,4 +46,8 @@
     <dimen name="create_event_spinner_between_items">12dp</dimen>
     <dimen name="create_event_spinner_arrow">25dp</dimen>
     <dimen name="create_event_blank_space">60sp</dimen>
+
+    <dimen name="event_info_image_height">170dp</dimen>
+    <dimen name="event_info_image_start">48dp</dimen>
+    <dimen name="event_info_image_end">60dp</dimen>
 </resources>

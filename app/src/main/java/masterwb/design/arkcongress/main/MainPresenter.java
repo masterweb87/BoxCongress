@@ -23,6 +23,8 @@ public class MainPresenter {
         eventBus.register(this);
     }
 
+    public void onDestroy() { eventBus.unregister(this); }
+
     @Subscribe
     public void onEventListMainThread(EventList eventList) {
         if(view != null) {

@@ -1,11 +1,14 @@
 package masterwb.design.arkcongress.event_info;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.List;
@@ -14,8 +17,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import masterwb.design.arkcongress.R;
 import masterwb.design.arkcongress.adapters.EventsAdapter;
+import masterwb.design.arkcongress.create_event.CreateEventActivity;
 import masterwb.design.arkcongress.db.FirebaseManager;
 import masterwb.design.arkcongress.entities.Event;
+import masterwb.design.arkcongress.login.LoginActivity;
+import masterwb.design.arkcongress.main.MainActivity;
+import masterwb.design.arkcongress.my_events.MyEventsActivity;
 
 public class EventInfoActivity extends AppCompatActivity implements EventInfoView {
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
@@ -25,9 +32,7 @@ public class EventInfoActivity extends AppCompatActivity implements EventInfoVie
     @BindView(R.id.inputEndDate) TextView endDate;
     @BindView(R.id.inputLocation) TextView location;
     @BindView(R.id.inputDescription) TextView description;
-    // Events data
-    private RecyclerView recyclerView;
-    private EventsAdapter adapter;
+
     // Presenter
     private EventInfoPresenter presenter;
     // Session
@@ -47,11 +52,69 @@ public class EventInfoActivity extends AppCompatActivity implements EventInfoVie
 
         firebaseManager.setFirebaseListener();
         setSupportActionBar(mainToolbar);
-
-        if(eventId != null) {
-            enableProgress();
-            firebaseManager.getSingleEvent(eventId);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        invalidateOptionsMenu();
+
+        enableProgress();
+        firebaseManager.getSingleEvent(eventId);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(menu.findItem(R.id.actionMainScreen) != null) {
+            menu.findItem(R.id.actionMainScreen).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionLogout:
+                logout();
+                break;
+            case R.id.actionCreateEvent:
+                goToCreateEvent();
+                break;
+            case R.id.actionMyEvents:
+                goToMyEvents();
+                break;
+            case android.R.id.home:
+                goBackToMainScreen();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
+    private void goBackToMainScreen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void goToCreateEvent() {
+        Intent intent = new Intent(this, CreateEventActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToMyEvents() {
+        Intent intent = new Intent(this, MyEventsActivity.class);
+        startActivity(intent);
     }
 
     private void enableProgress() {
@@ -64,6 +127,13 @@ public class EventInfoActivity extends AppCompatActivity implements EventInfoVie
 
     private void disableProgress() {
         progress.dismiss();
+    }
+
+    public void logout() {
+        firebaseManager.signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override

@@ -27,8 +27,7 @@ public class MyEventsActivity extends AppCompatActivity implements MyEventsView 
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
     @BindView(R.id.myEventsRecyclerView) RecyclerView myEventsRecyclerView;
 
-    // Events data
-    private RecyclerView recyclerView;
+    // Events adapter
     private EventsAdapter adapter;
     // Session
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
@@ -87,6 +86,12 @@ public class MyEventsActivity extends AppCompatActivity implements MyEventsView 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     public void setRecyclerView() {

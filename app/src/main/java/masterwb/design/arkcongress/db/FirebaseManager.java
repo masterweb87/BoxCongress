@@ -175,6 +175,7 @@ public class FirebaseManager {
                 List<Event> myEvents = new ArrayList<>();
                 for(DataSnapshot oneChild : dataSnapshot.getChildren()) {
                     Event oneEvent = oneChild.getValue(Event.class);
+                    oneEvent.setId(oneChild.getKey());
                     myEvents.add(oneEvent);
                 }
                 EventList eventList = new EventList();
