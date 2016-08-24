@@ -26,12 +26,12 @@ import masterwb.design.arkcongress.my_events.MyEventsActivity;
 
 public class EventInfoActivity extends AppCompatActivity implements EventInfoView {
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
-    @BindView(R.id.editEventName) TextView eventName;
-    @BindView(R.id.listEventType) TextView eventType;
-    @BindView(R.id.inputStartDate) TextView startDate;
-    @BindView(R.id.inputEndDate) TextView endDate;
-    @BindView(R.id.inputLocation) TextView location;
-    @BindView(R.id.inputDescription) TextView description;
+    @BindView(R.id.eventName) TextView eventName;
+    @BindView(R.id.eventType) TextView eventType;
+    @BindView(R.id.startDate) TextView startDate;
+    @BindView(R.id.endDate) TextView endDate;
+    @BindView(R.id.location) TextView location;
+    @BindView(R.id.description) TextView description;
 
     // Presenter
     private EventInfoPresenter presenter;

@@ -32,19 +32,37 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ark_congress_background"
-                app:expandedTitleMarginStart="@dimen/event_info_image_start"
-                app:expandedTitleMarginEnd="@dimen/event_info_image_end"
                 app:layout_collapseMode="parallax"/>
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
+                android:layout_marginBottom="@dimen/event_info_logo_top"
                 android:id="@+id/mainToolbar"
-                app:layout_scrollFlags="scroll|enterAlways"
                 app:layout_collapseMode="pin"
                 app:theme="@style/AppTheme.NoActionBar"
                 app:popupTheme="@style/AppTheme.NoActionBar.Submenu">
             </android.support.v7.widget.Toolbar>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:id="@+id/logoImageLayout"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/eventLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_launcher"
+                    app:civ_fill_color="@color/white"
+                    app:civ_border_width="@dimen/event_info_logo_border_width"
+                    app:civ_border_color="@color/colorAccent"/>
+            </RelativeLayout>
+
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -65,50 +83,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/create_event_sublayout_padding"
-                android:id="@+id/titleLayout">
-
-                <ImageView
-                    tools:ignore="contentDescription"
-                    android:id="@+id/eventLogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editEventName"
-                    android:textColor="@color/textColorContent"
-                    android:textSize="@dimen/create_event_input"
-                    android:layout_alignBottom="@+id/eventLogo"
-                    android:layout_toEndOf="@+id/eventLogo"
-                    android:layout_toRightOf="@+id/eventLogo"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/create_event_sublayout_padding"
                 android:id="@+id/typeLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/labelEventType"
-                    android:text="@string/event_type"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
+                    android:id="@+id/eventName"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="@dimen/create_event_input"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/listEventType"
+                    android:id="@+id/eventType"
                     android:textColor="@color/textColorContent"
-                    android:layout_below="@id/labelEventType" />
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_toEndOf="@+id/eventName"
+                    android:layout_toRightOf="@+id/eventName"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -118,48 +112,20 @@
                 android:id="@+id/startDateLayout">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/labelStartDate"
-                    android:text="@string/event_startdate"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
                     android:layout_width="@dimen/create_event_date_input"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/inputStartDate"
+                    android:id="@+id/startDate"
                     android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_below="@+id/labelStartDate" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/labelStartTime"
-                    android:text="@string/event_starttime"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="@dimen/create_event_between_date_time"
-                    android:layout_marginStart="@dimen/create_event_between_date_time"
-                    android:layout_toEndOf="@+id/labelStartDate"
-                    android:layout_toRightOf="@+id/labelStartDate"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/inputStartTime"
+                    android:id="@+id/startTime"
                     android:textSize="@dimen/create_event_label"
                     android:textStyle="bold"
-                    android:layout_below="@+id/labelStartTime"
-                    android:layout_alignStart="@+id/labelStartTime"
-                    android:layout_alignLeft="@+id/labelStartTime"
-                    android:layout_toEndOf="@+id/inputStartDate"
-                    android:layout_toRightOf="@+id/inputStartDate"/>
+                    android:layout_toEndOf="@+id/startDate"
+                    android:layout_toRightOf="@+id/startDate"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -169,48 +135,20 @@
                 android:id="@+id/endDateLayout">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/labelEndDate"
-                    android:text="@string/event_enddate"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
                     android:layout_width="@dimen/create_event_date_input"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/inputEndDate"
+                    android:id="@+id/endDate"
                     android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_below="@+id/labelEndDate" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/labelEndTime"
-                    android:text="@string/event_endtime"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="@dimen/create_event_between_end_date_time"
-                    android:layout_marginStart="@dimen/create_event_between_end_date_time"
-                    android:layout_toEndOf="@+id/labelEndDate"
-                    android:layout_toRightOf="@+id/labelEndDate"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/inputEndTime"
+                    android:id="@+id/endTime"
                     android:textSize="@dimen/create_event_label"
                     android:textStyle="bold"
-                    android:layout_below="@+id/labelEndTime"
-                    android:layout_alignStart="@+id/labelEndTime"
-                    android:layout_alignLeft="@+id/labelEndTime"
-                    android:layout_toEndOf="@+id/inputEndDate"
-                    android:layout_toRightOf="@+id/inputEndDate"/>
+                    android:layout_toEndOf="@+id/endDate"
+                    android:layout_toRightOf="@+id/endDate"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -220,23 +158,11 @@
                 android:id="@+id/locationLayout">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/labelLocation"
-                    android:text="@string/event_location"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/inputLocation"
+                    android:id="@+id/location"
                     android:textColor="@color/textColorContent"
-                    android:textSize="@dimen/create_event_input"
-                    android:layout_below="@id/labelLocation" />
+                    android:textSize="@dimen/create_event_input" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -246,26 +172,14 @@
                 android:id="@+id/descriptionLayout">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/labelDescription"
-                    android:text="@string/event_description"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_text"
-                    android:id="@+id/inputDescription"
+                    android:id="@+id/description"
                     android:gravity="top|start"
                     android:lines="3"
                     android:maxLines="6"
                     android:textColor="@color/textColorContent"
-                    android:textSize="@dimen/create_event_input"
-                    android:layout_below="@id/labelDescription" />
+                    android:textSize="@dimen/create_event_input" />
             </RelativeLayout>
 
             <RelativeLayout
