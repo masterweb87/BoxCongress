@@ -141,8 +141,8 @@ public class EventInfoActivity extends AppCompatActivity implements EventInfoVie
         Event eventInfo = event.get(0);
         eventName.setText(eventInfo.getName());
         eventType.setText(eventInfo.getType());
-        startDate.setText(eventInfo.getStartDate());
-        endDate.setText(eventInfo.getEndDate());
+        startDate.setText(eventInfo.getFormattedStartDate());
+        endDate.setText(eventInfo.getFormattedEndDate());
         location.setText(eventInfo.getLocation());
         description.setText(eventInfo.getDescription());
         disableProgress();

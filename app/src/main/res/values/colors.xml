@@ -8,6 +8,10 @@
     <color name="toolBarBackground">#4F43C8</color>
     <color name="descriptionBackground">#EEEEFF</color>
 
+    <color name="infoTitleStart">#D8D8D8</color>
+    <color name="infoTitleEnd">#EEEEFF</color>
+    <color name="infoDescriptionBackground">#A9BAFF</color>
+
     <color name="textToolbar">#FFFFFF</color>
     <color name="textColorBackground">#EEEEFF</color>
     <color name="textColorContent">#010101</color>

@@ -50,6 +50,13 @@
 
     <string name="date_divider"> - </string>
 
+    <!-- EVENT INFO -->
+
+    <string name="event_info_date_label_start">Inicia</string>
+    <string name="event_info_date_label_end">Termina</string>
+    <string name="event_info_location_label">¿En dónde?</string>
+    <string name="event_info_description_label">¿De qué trata?</string>
+
     <!-- LOADING TEXT -->
 
     <string name="my_event_loading_title">Cargando tus eventos…</string>
@@ -57,4 +64,8 @@
 
     <string name="main_loading_title">Cargando la lista de eventos…</string>
     <string name="main_loading_msg">Estamos cargando la lista de eventos en activo</string>
+
+    <!-- OTHER -->
+
+    <string name="autocomplete_location_adapter_error">Google API no está disponible</string>
 </resources>

@@ -3,6 +3,8 @@ package masterwb.design.arkcongress.entities;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -69,6 +71,28 @@ public class Event {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    @Exclude
+    public String getFormattedStartDate() {
+        try {
+            Date formatted = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(this.startDate);
+            return new SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault()).format(formatted);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Exclude
+    public String getFormattedEndDate() {
+        try {
+            Date formatted = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(this.endDate);
+            return new SimpleDateFormat("EEEE, dd MMM yyyy", Locale.getDefault()).format(formatted);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String getLogoUrl() {

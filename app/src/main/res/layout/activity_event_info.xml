@@ -53,14 +53,26 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/eventLogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/event_info_logo_size"
+                    android:layout_height="@dimen/event_info_logo_size"
                     android:scaleType="centerCrop"
-                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
                     android:src="@mipmap/ic_launcher"
                     app:civ_fill_color="@color/white"
                     app:civ_border_width="@dimen/event_info_logo_border_width"
                     app:civ_border_color="@color/colorAccent"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/eventType"
+                    android:background="@drawable/type_background"
+                    android:text="@string/test_text"
+                    android:textColor="@color/white"
+                    android:layout_alignBottom="@+id/eventLogo"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"/>
             </RelativeLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -82,105 +94,175 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/create_event_sublayout_padding"
-                android:id="@+id/typeLayout">
+                android:background="@drawable/title_event_info"
+                android:id="@+id/titleLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/eventName"
-                    android:textColor="@color/textColorContent"
+                    android:text="@string/test_text"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/create_event_input"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true" />
+            </RelativeLayout>
 
-                <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/date_event_info"
+                android:weightSum="2"
+                android:id="@+id/datesLayout"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/eventType"
-                    android:textColor="@color/textColorContent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_toEndOf="@+id/eventName"
-                    android:layout_toRightOf="@+id/eventName"/>
-            </RelativeLayout>
+                    android:layout_weight="1"
+                    android:padding="@dimen/event_info_date_padding"
+                    android:id="@+id/startDateLeft"
+                    android:orientation="vertical">
 
-            <RelativeLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/startDateLabel"
+                        android:layout_gravity="center"
+                        android:paddingBottom="@dimen/event_info_date_bottom_padding"
+                        android:text="@string/event_info_date_label_start"
+                        android:textSize="@dimen/event_info_date_label"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        tools:ignore="contentDescription"
+                        android:id="@+id/startDateIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingBottom="@dimen/event_info_date_bottom_padding"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_insert_invitation_white_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/startDate"
+                        android:layout_gravity="center"
+                        android:text="@string/test_text"
+                        android:textSize="@dimen/event_info_date_text"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/startTime"
+                        android:layout_gravity="center"
+                        android:text="@string/test_text"
+                        android:textSize="@dimen/event_info_time_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/event_info_date_padding"
+                    android:id="@+id/startDateRight"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/endDateLabel"
+                        android:layout_gravity="center"
+                        android:paddingBottom="@dimen/event_info_date_bottom_padding"
+                        android:text="@string/event_info_date_label_end"
+                        android:textSize="@dimen/event_info_date_label"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        tools:ignore="contentDescription"
+                        android:id="@+id/endDateIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingBottom="@dimen/event_info_date_bottom_padding"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_insert_invitation_white_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/endDate"
+                        android:layout_gravity="center"
+                        android:text="@string/test_text"
+                        android:textSize="@dimen/event_info_date_text"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/endTime"
+                        android:layout_gravity="center"
+                        android:text="@string/test_text"
+                        android:textSize="@dimen/event_info_time_text" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/date_event_info"
                 android:layout_marginBottom="@dimen/create_event_sublayout_padding"
-                android:id="@+id/startDateLayout">
-
-                <TextView
-                    android:layout_width="@dimen/create_event_date_input"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/startDate"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/startTime"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_toEndOf="@+id/startDate"
-                    android:layout_toRightOf="@+id/startDate"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/create_event_sublayout_padding"
-                android:id="@+id/endDateLayout">
-
-                <TextView
-                    android:layout_width="@dimen/create_event_date_input"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/endDate"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/endTime"
-                    android:textSize="@dimen/create_event_label"
-                    android:textStyle="bold"
-                    android:layout_toEndOf="@+id/endDate"
-                    android:layout_toRightOf="@+id/endDate"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/create_event_sublayout_padding"
+                android:orientation="vertical"
                 android:id="@+id/locationLayout">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/location"
-                    android:textColor="@color/textColorContent"
+                    android:id="@+id/locationLabel"
+                    android:background="@drawable/title_event_info"
+                    android:text="@string/event_info_location_label"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/create_event_input" />
-            </RelativeLayout>
 
-            <RelativeLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/location"
+                    android:text="@string/test_text"
+                    android:textSize="@dimen/create_event_input" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/date_event_info"
                 android:layout_marginBottom="@dimen/create_event_sublayout_padding"
+                android:orientation="vertical"
                 android:id="@+id/descriptionLayout">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/descriptionLabel"
+                    android:background="@drawable/title_event_info"
+                    android:text="@string/event_info_description_label"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/create_event_input" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/description"
+                    android:background="@drawable/description_background"
                     android:gravity="top|start"
                     android:lines="3"
                     android:maxLines="6"
-                    android:textColor="@color/textColorContent"
+                    android:text="@string/test_text"
                     android:textSize="@dimen/create_event_input" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

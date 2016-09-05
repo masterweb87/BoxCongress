@@ -49,5 +49,12 @@
 
     <dimen name="event_info_image_height">180dp</dimen>
     <dimen name="event_info_logo_top">30dp</dimen>
-    <dimen name="event_info_logo_border_width">2dp</dimen>
+    <dimen name="event_info_logo_size">90dp</dimen>
+    <dimen name="event_info_logo_border_width">1dp</dimen>
+    <dimen name="event_info_title_elevation">5dp</dimen>
+    <dimen name="event_info_date_padding">25sp</dimen>
+    <dimen name="event_info_date_bottom_padding">8sp</dimen>
+    <dimen name="event_info_date_label">14sp</dimen>
+    <dimen name="event_info_date_text">18sp</dimen>
+    <dimen name="event_info_time_text">9sp</dimen>
 </resources>

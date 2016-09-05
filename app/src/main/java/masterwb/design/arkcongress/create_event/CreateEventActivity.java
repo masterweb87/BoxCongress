@@ -1,21 +1,33 @@
 package masterwb.design.arkcongress.create_event;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -27,14 +39,16 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import masterwb.design.arkcongress.R;
+import masterwb.design.arkcongress.adapters.AutoLocationAdapter;
 import masterwb.design.arkcongress.db.FirebaseManager;
+import masterwb.design.arkcongress.entities.AutoLocation;
 import masterwb.design.arkcongress.entities.Event;
 import masterwb.design.arkcongress.login.LoginActivity;
 import masterwb.design.arkcongress.main.MainActivity;
 import masterwb.design.arkcongress.my_events.MyEventsActivity;
 
 public class CreateEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener {
     @BindView(R.id.createFormLayout) LinearLayout formLayout;
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
     @BindView(R.id.editEventName) EditText eventName;
@@ -43,7 +57,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     @BindView(R.id.inputStartTime) TextView startTime;
     @BindView(R.id.inputEndDate) TextView endDate;
     @BindView(R.id.inputEndTime) TextView endTime;
-    @BindView(R.id.inputLocation) EditText location;
+    @BindView(R.id.autoCompleteLocation) AutoCompleteTextView autoLocation;
     @BindView(R.id.inputDescription) EditText description;
     @BindView(R.id.submitCreateEvent) Button submitButton;
 
@@ -55,8 +69,12 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     private boolean startTimeClicked;
     // Type
     private String typeSelected;
-    // Session
+    // Session and adapters
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
+    private GoogleApiClient googleClient;
+    private AutoLocationAdapter adapter;
+    // Code for location autocomplete
+    private static final int AUTOCOMPLETE_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +96,21 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         setTimeClickListeners(startTime, "StartTime");
         setTimeClickListeners(endTime, "EndTime");
 
+        // Set Google Places API
+        googleClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this)
+                .addApi(Places.GEO_DATA_API).addApi(Places.PLACE_DETECTION_API).build();
+
+        // Set Location adapter
+        adapter = new AutoLocationAdapter(this, googleClient);
+        autoLocation.setAdapter(adapter);
+        autoLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AutoLocation location = (AutoLocation) parent.getItemAtPosition(position);
+                getLocation(location.getId());
+            }
+        });
+
         // Create the event and redirects
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +124,22 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(googleClient != null && googleClient.isConnected()) {
+            googleClient.disconnect();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(googleClient != null) {
+            googleClient.connect();
+        }
     }
 
     @Override
@@ -155,6 +204,18 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         String time = hourOfDay + ":" + newMinute;
         if(startTimeClicked) startTime.setText(time);
         else endTime.setText(time);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        if(connectionResult.getErrorMessage() != null) {
+            Snackbar.make(formLayout, connectionResult.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private void setDateClickListeners(TextView input, final String tagIdentity) {
@@ -227,9 +288,33 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         newEvent.setStartDate(startDate.getText().toString());
         newEvent.setEndDate(endDate.getText().toString());
         // Set location and description
-        newEvent.setLocation(location.getText().toString());
+        newEvent.setLocation(autoLocation.getText().toString());
         newEvent.setDescription(description.getText().toString());
         registerEventOnDatabase(newEvent);
+    }
+
+    private void getLocation(String id) {
+        if(googleClient != null) {
+          Places.GeoDataApi.getPlaceById(googleClient, id).setResultCallback(new ResultCallback<PlaceBuffer>() {
+              @Override
+              public void onResult(@NonNull PlaceBuffer places) {
+                  if(places.getStatus().isSuccess()) {
+                      Place location = places.get(0);
+                      displayLocation(location);
+                      adapter.clear();
+                  }
+                  places.release();
+              }
+          });
+        }
+    }
+
+    private void displayLocation(Place location) {
+        String infoLocation = "";
+        if(!TextUtils.isEmpty(location.getAddress()))
+            infoLocation += location.getAddress();
+
+        autoLocation.setText(infoLocation);
     }
 
     private void registerEventOnDatabase(Event newEvent) {
