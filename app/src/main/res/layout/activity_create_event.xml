@@ -234,6 +234,13 @@
                 android:textColor="@color/textColorContent"
                 android:textSize="@dimen/create_event_input"
                 android:layout_below="@id/labelLocation" />
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:id="@+id/locationMap"
+                android:layout_below="@+id/autoCompleteLocation" />
         </RelativeLayout>
 
         <RelativeLayout

@@ -66,19 +66,20 @@ public class AutoLocationAdapter extends ArrayAdapter<AutoLocation> {
                     return null;
                 }
                 clear();
-                if(!constraint.toString().isEmpty()) displayLocationResults(constraint.toString());
+                displayLocationResults(constraint.toString());
                 return null;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                notifyDataSetChanged();
+                if(results != null) {
+                    notifyDataSetChanged();
+                }
             }
         };
     }
 
-    private void displayLocationResults(String query)
-    {
+    private void displayLocationResults(String query) {
         LatLng firstCoord = new LatLng(16.12, -116.65);
         LatLng secCoord = new LatLng(31.56, -86.22);
         LatLngBounds bounds = new LatLngBounds(firstCoord, secCoord);

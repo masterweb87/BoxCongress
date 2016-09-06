@@ -1,14 +1,11 @@
 package masterwb.design.arkcongress.create_event;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +25,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -48,7 +51,7 @@ import masterwb.design.arkcongress.main.MainActivity;
 import masterwb.design.arkcongress.my_events.MyEventsActivity;
 
 public class CreateEventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener {
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
     @BindView(R.id.createFormLayout) LinearLayout formLayout;
     @BindView(R.id.mainToolbar) Toolbar mainToolbar;
     @BindView(R.id.editEventName) EditText eventName;
@@ -60,6 +63,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     @BindView(R.id.autoCompleteLocation) AutoCompleteTextView autoLocation;
     @BindView(R.id.inputDescription) EditText description;
     @BindView(R.id.submitCreateEvent) Button submitButton;
+    @BindView(R.id.locationMap) MapFragment locationMap;
 
     // Date and Time
     private DatePickerDialog startDateDialog;
@@ -73,8 +77,9 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     private FirebaseManager firebaseManager = FirebaseManager.getInstance();
     private GoogleApiClient googleClient;
     private AutoLocationAdapter adapter;
-    // Code for location autocomplete
-    private static final int AUTOCOMPLETE_CODE = 1;
+    // Map objects
+    private GoogleMap cMap;
+    private MarkerOptions markerLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +116,17 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
+        // Set the map in the layout
+        locationMap.getMapAsync(this);
+
         // Create the event and redirects
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!verifyRequiredNotEmpty()) {
+                if (!verifyRequiredNotEmpty()) {
                     createNewEvent();
                     goToMyEvents();
-                }
-                else {
+                } else {
                     Snackbar.make(formLayout, R.string.create_event_required_error, Snackbar.LENGTH_SHORT).show();
                 }
             }
@@ -129,7 +136,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     @Override
     protected void onStop() {
         super.onStop();
-        if(googleClient != null && googleClient.isConnected()) {
+        if (googleClient != null && googleClient.isConnected()) {
             googleClient.disconnect();
         }
     }
@@ -137,7 +144,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     @Override
     protected void onStart() {
         super.onStart();
-        if(googleClient != null) {
+        if (googleClient != null) {
             googleClient.connect();
         }
     }
@@ -202,8 +209,13 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         String newMinute = String.format(Locale.US, "%02d", minute);
         String time = hourOfDay + ":" + newMinute;
-        if(startTimeClicked) startTime.setText(time);
+        if (startTimeClicked) startTime.setText(time);
         else endTime.setText(time);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.addMarker(markerLocation);
     }
 
     @Override
@@ -213,7 +225,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if(connectionResult.getErrorMessage() != null) {
+        if (connectionResult.getErrorMessage() != null) {
             Snackbar.make(formLayout, connectionResult.getErrorMessage(), Snackbar.LENGTH_SHORT).show();
         }
     }
@@ -223,14 +235,13 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
-                if(tagIdentity.contains("Start")) {
+                if (tagIdentity.contains("Start")) {
                     startDateDialog = DatePickerDialog.newInstance(
                             CreateEventActivity.this,
                             now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
                     startDateDialog.vibrate(false);
                     startDateDialog.show(getFragmentManager(), tagIdentity);
-                }
-                else {
+                } else {
                     endDateDialog = DatePickerDialog.newInstance(
                             CreateEventActivity.this,
                             now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
@@ -247,14 +258,13 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View v) {
                 Calendar now = Calendar.getInstance();
                 Calendar fixed = new GregorianCalendar(2016, 1, 1);
-                if(tagIdentity.contains("Start")) {
+                if (tagIdentity.contains("Start")) {
                     startTimeClicked = true;
                     startTimeDialog = TimePickerDialog.newInstance(
                             CreateEventActivity.this, now.get(Calendar.HOUR_OF_DAY), fixed.get(Calendar.MINUTE), true);
                     startTimeDialog.vibrate(false);
                     startTimeDialog.show(getFragmentManager(), tagIdentity);
-                }
-                else {
+                } else {
                     startTimeClicked = false;
                     endTimeDialog = TimePickerDialog.newInstance(
                             CreateEventActivity.this, now.get(Calendar.HOUR_OF_DAY), fixed.get(Calendar.MINUTE), true);
@@ -294,27 +304,34 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void getLocation(String id) {
-        if(googleClient != null) {
-          Places.GeoDataApi.getPlaceById(googleClient, id).setResultCallback(new ResultCallback<PlaceBuffer>() {
-              @Override
-              public void onResult(@NonNull PlaceBuffer places) {
-                  if(places.getStatus().isSuccess()) {
-                      Place location = places.get(0);
-                      displayLocation(location);
-                      adapter.clear();
-                  }
-                  places.release();
-              }
-          });
+        if (googleClient != null) {
+            Places.GeoDataApi.getPlaceById(googleClient, id).setResultCallback(new ResultCallback<PlaceBuffer>() {
+                @Override
+                public void onResult(@NonNull PlaceBuffer places) {
+                    if (places.getStatus().isSuccess()) {
+                        Place location = places.get(0);
+                        displayLocation(location);
+                        createMarkerInMap(location);
+                        adapter.clear();
+                    }
+                    places.release();
+                }
+            });
         }
     }
 
     private void displayLocation(Place location) {
         String infoLocation = "";
-        if(!TextUtils.isEmpty(location.getAddress()))
+        if (!TextUtils.isEmpty(location.getAddress()))
             infoLocation += location.getAddress();
 
         autoLocation.setText(infoLocation);
+    }
+
+    private void createMarkerInMap(Place location) {
+        LatLng whereIs = location.getLatLng();
+        String locationTitle = location.getName().toString();
+        markerLocation.position(whereIs).title(locationTitle);
     }
 
     private void registerEventOnDatabase(Event newEvent) {
