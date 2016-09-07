@@ -237,7 +237,7 @@
 
             <fragment
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/create_event_map_height"
                 android:name="com.google.android.gms.maps.MapFragment"
                 android:id="@+id/locationMap"
                 android:layout_below="@+id/autoCompleteLocation" />

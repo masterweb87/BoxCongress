@@ -63,7 +63,6 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     @BindView(R.id.autoCompleteLocation) AutoCompleteTextView autoLocation;
     @BindView(R.id.inputDescription) EditText description;
     @BindView(R.id.submitCreateEvent) Button submitButton;
-    @BindView(R.id.locationMap) MapFragment locationMap;
 
     // Date and Time
     private DatePickerDialog startDateDialog;
@@ -117,6 +116,9 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         });
 
         // Set the map in the layout
+        markerLocation = new MarkerOptions();
+        markerLocation.position(new LatLng(22.50,-101.45)).title("");
+        MapFragment locationMap = (MapFragment) getFragmentManager().findFragmentById(R.id.locationMap);
         locationMap.getMapAsync(this);
 
         // Create the event and redirects
