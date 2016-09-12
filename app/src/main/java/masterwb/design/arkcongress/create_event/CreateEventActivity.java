@@ -25,9 +25,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -77,8 +80,10 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     private GoogleApiClient googleClient;
     private AutoLocationAdapter adapter;
     // Map objects
-    private GoogleMap cMap;
+    private MapFragment locationMap;
+    private CameraPosition cameraMap;
     private MarkerOptions markerLocation;
+    private Float mapZoom = 14.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +122,10 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
 
         // Set the map in the layout
         markerLocation = new MarkerOptions();
-        markerLocation.position(new LatLng(22.50,-101.45)).title("");
-        MapFragment locationMap = (MapFragment) getFragmentManager().findFragmentById(R.id.locationMap);
+        LatLng defaultLatLng = new LatLng(22.50,-101.45);
+        markerLocation.position(defaultLatLng).title("");
+        cameraMap = new CameraPosition.Builder().target(defaultLatLng).zoom(mapZoom).build();
+        locationMap = (MapFragment) getFragmentManager().findFragmentById(R.id.locationMap);
         locationMap.getMapAsync(this);
 
         // Create the event and redirects
@@ -216,8 +223,9 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(markerLocation);
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(markerLocation);
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraMap));
     }
 
     @Override
@@ -315,6 +323,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
                         displayLocation(location);
                         createMarkerInMap(location);
                         adapter.clear();
+                        locationMap.getMapAsync(CreateEventActivity.this);
                     }
                     places.release();
                 }
@@ -334,6 +343,8 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
         LatLng whereIs = location.getLatLng();
         String locationTitle = location.getName().toString();
         markerLocation.position(whereIs).title(locationTitle);
+        // Actualizar la cámara del mapa
+        cameraMap = new CameraPosition.Builder().target(location.getLatLng()).zoom(mapZoom).build();
     }
 
     private void registerEventOnDatabase(Event newEvent) {

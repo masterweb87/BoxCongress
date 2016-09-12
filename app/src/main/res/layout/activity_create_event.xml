@@ -34,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollCreateEvent"
+        android:isScrollContainer="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
@@ -49,25 +50,20 @@
             android:layout_marginBottom="@dimen/create_event_sublayout_padding"
             android:id="@+id/titleLayout">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/labelEventName"
-                android:text="@string/event_name"
-                android:textSize="@dimen/create_event_label"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <EditText
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_text"
-                android:id="@+id/editEventName"
-                android:inputType="text"
-                android:textColor="@color/textColorContent"
-                android:textSize="@dimen/create_event_input"
-                android:layout_below="@id/labelEventName" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_text"
+                    android:id="@+id/editEventName"
+                    android:hint="@string/event_name"
+                    android:inputType="text"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="@dimen/create_event_input" />
+            </android.support.design.widget.TextInputLayout>
         </RelativeLayout>
 
         <RelativeLayout
@@ -215,32 +211,28 @@
             android:layout_marginBottom="@dimen/create_event_sublayout_padding"
             android:id="@+id/locationLayout">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/labelLocation"
-                android:text="@string/event_location"
-                android:textSize="@dimen/create_event_label"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <android.support.v7.widget.AppCompatAutoCompleteTextView
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_text"
-                android:id="@+id/autoCompleteLocation"
-                android:inputType="textAutoComplete"
-                android:textColor="@color/textColorContent"
-                android:textSize="@dimen/create_event_input"
-                android:layout_below="@id/labelLocation" />
+                android:id="@+id/autoCompleteHintLocation">
+
+                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_text"
+                    android:id="@+id/autoCompleteLocation"
+                    android:hint="@string/event_location"
+                    android:inputType="textAutoComplete"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="@dimen/create_event_input" />
+            </android.support.design.widget.TextInputLayout>
 
             <fragment
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/create_event_map_height"
                 android:name="com.google.android.gms.maps.MapFragment"
                 android:id="@+id/locationMap"
-                android:layout_below="@+id/autoCompleteLocation" />
+                android:layout_below="@+id/autoCompleteHintLocation" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -249,28 +241,23 @@
             android:layout_marginBottom="@dimen/create_event_sublayout_padding"
             android:id="@+id/descriptionLayout">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/labelDescription"
-                android:text="@string/event_description"
-                android:textSize="@dimen/create_event_label"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <EditText
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_text"
-                android:id="@+id/inputDescription"
-                android:gravity="top|start"
-                android:lines="3"
-                android:maxLines="6"
-                android:inputType="textMultiLine"
-                android:textColor="@color/textColorContent"
-                android:textSize="@dimen/create_event_input"
-                android:layout_below="@id/labelDescription" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_text"
+                    android:id="@+id/inputDescription"
+                    android:hint="@string/event_description"
+                    android:gravity="top|start"
+                    android:lines="3"
+                    android:maxLines="6"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/textColorContent"
+                    android:textSize="@dimen/create_event_input" />
+            </android.support.design.widget.TextInputLayout>
         </RelativeLayout>
 
         <RelativeLayout

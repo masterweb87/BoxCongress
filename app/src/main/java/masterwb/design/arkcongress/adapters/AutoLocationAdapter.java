@@ -70,7 +70,13 @@ public class AutoLocationAdapter extends ArrayAdapter<AutoLocation> {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if(results != null) {
-                    notifyDataSetChanged();
+                    if(results.count > 0)
+                        notifyDataSetChanged();
+                    else
+                        notifyDataSetInvalidated();
+                }
+                else {
+                    notifyDataSetInvalidated();
                 }
             }
         };
