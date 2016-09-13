@@ -28,6 +28,7 @@
         <item>Congreso</item>
         <item>Taller</item>
         <item>Bazar</item>
+        <item>Elige el tipo de evento…</item>
     </string-array>
 
     <string name="create_event_loading_title">Creando evento…</string>
@@ -37,14 +38,14 @@
     <string name="create_event_date_format_error">El formato de las fechas es incorrecto. Intente de nuevo</string>
 
     <string name="event_title">Crea tu evento</string>
-    <string name="event_name">Título</string>
-    <string name="event_type">Tipo</string>
+    <string name="event_name">Nombre de tu evento</string>
     <string name="event_selector_prompt">Elige el tipo de evento</string>
+    <string name="event_type_desc">Tipo</string>
     <string name="event_startdate">Inicia el</string>
     <string name="event_starttime">Hora</string>
     <string name="event_enddate">Termina el</string>
     <string name="event_endtime">Hora</string>
-    <string name="event_location">Lugar</string>
+    <string name="event_location">Lugar de tu evento</string>
     <string name="event_description">Añade una descripción</string>
     <string name="event_submit">Crear</string>
 

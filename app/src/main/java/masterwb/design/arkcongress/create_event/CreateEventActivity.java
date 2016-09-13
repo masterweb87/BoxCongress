@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,14 +24,12 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -46,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import masterwb.design.arkcongress.R;
 import masterwb.design.arkcongress.adapters.AutoLocationAdapter;
+import masterwb.design.arkcongress.adapters.EventTypeAdapter;
 import masterwb.design.arkcongress.db.FirebaseManager;
 import masterwb.design.arkcongress.entities.AutoLocation;
 import masterwb.design.arkcongress.entities.Event;
@@ -286,10 +284,11 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void setEventTypeList() {
-        ArrayAdapter<CharSequence> typeList = ArrayAdapter.createFromResource(this,
-                R.array.event_type_list, R.layout.spinner_item);
-        typeList.setDropDownViewResource(R.layout.spinner_list_item);
-        listEventType.setAdapter(typeList);
+        //ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource(this, R.array.event_type_list, R.layout.spinner_item);
+        EventTypeAdapter listAdapter = new EventTypeAdapter(this, R.layout.spinner_item, getResources().getStringArray(R.array.event_type_list));
+        listAdapter.setDropDownViewResource(R.layout.spinner_list_item);
+        listEventType.setAdapter(listAdapter);
+        listEventType.setSelection(listAdapter.getCount());
         listEventType.setOnItemSelectedListener(this);
     }
 
@@ -299,6 +298,7 @@ public class CreateEventActivity extends AppCompatActivity implements AdapterVie
                 || description.getText().toString().isEmpty();
     }
 
+    // Método que crea y registra a su vez un nuevo evento en la BD
     private void createNewEvent() {
         Event newEvent = new Event();
         // Set name and type
